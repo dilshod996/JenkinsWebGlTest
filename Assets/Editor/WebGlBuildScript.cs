@@ -14,7 +14,7 @@ public class WebGlBuildScript : MonoBehaviour
     private static AddressableAssetSettings settings;
 
     private static string unknownKey = "UnkownKey"; // for testing what to know about the folder // now  it is also addressable version name
-    private static string BuildResultName = "Builds";
+    private static string BuildResultName = "ServerData/Builds";
 
     private const string ASSETFOLDERNAME = "Assets";
     private const string AddressableProfileId = "Remote";
@@ -36,7 +36,7 @@ public class WebGlBuildScript : MonoBehaviour
             allDefines.Add(SYMBOLE);
         }
 
-        allDefines.Add(BuildResultName);
+        allDefines.Add(unknownKey);
 
 
         PlayerSettings.SetScriptingDefineSymbolsForGroup(
