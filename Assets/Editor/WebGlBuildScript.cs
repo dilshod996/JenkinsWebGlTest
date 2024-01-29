@@ -36,7 +36,7 @@ public class WebGlBuildScript : MonoBehaviour
             allDefines.Add(SYMBOLE);
         }
 
-        allDefines.Add(unknownKey);
+        allDefines.Add(BuildResultName);
 
 
         PlayerSettings.SetScriptingDefineSymbolsForGroup(
@@ -83,7 +83,7 @@ public class WebGlBuildScript : MonoBehaviour
 
         buildPlayerOptions.scenes = FindEnabledEditorScenes();
 
-        buildPlayerOptions.locationPathName = unknownKey;
+        buildPlayerOptions.locationPathName = BuildResultName;
         buildPlayerOptions.target = BuildTarget.WebGL;
         buildPlayerOptions.options = BuildOptions.None;
 
