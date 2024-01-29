@@ -14,10 +14,15 @@ public class WebGlBuildScript : MonoBehaviour
     private static AddressableAssetSettings settings;
 
     private static string unknownKey = "UnkownKey"; // for testing what to know about the folder // now  it is also addressable version name
-    private static string BuildResultName = "ServerData/Builds";
+    private static string BuildResultName = "Builds";
+
 
     private const string ASSETFOLDERNAME = "Assets";
     private const string AddressableProfileId = "Remote";
+
+
+    // Working with branches for addressables and build files
+    private const string Devbranch = "DeveloperMode";
 
     
 
@@ -64,7 +69,8 @@ public class WebGlBuildScript : MonoBehaviour
         settings.OverridePlayerVersion = unknownKey; // only for test
         settings.ContentStateBuildPath = "";
 
-        string profileId = settings.profileSettings.GetProfileId(AddressableProfileId);
+        //string profileId = settings.profileSettings.GetProfileId(AddressableProfileId); // This for Remote Profile build
+        string profileId = settings.profileSettings.GetProfileId(Devbranch);
         settings.activeProfileId = profileId;
 
         AddressableAssetSettings.BuildPlayerContent();
@@ -83,7 +89,7 @@ public class WebGlBuildScript : MonoBehaviour
 
         buildPlayerOptions.scenes = FindEnabledEditorScenes();
 
-        buildPlayerOptions.locationPathName = BuildResultName;
+        buildPlayerOptions.locationPathName =Devbranch +"/"+ BuildResultName;
         buildPlayerOptions.target = BuildTarget.WebGL;
         buildPlayerOptions.options = BuildOptions.None;
 

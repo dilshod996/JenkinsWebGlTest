@@ -80,6 +80,20 @@ MonoBehaviour:
         m_Value: ServerData/[BuildTarget]
       - m_Id: 67b22d229bef344a09a6aeccb886c54e
         m_Value: https://jenkinsbucket-salin.s3.ap-northeast-2.amazonaws.com/Test/[BuildTarget]
+    - m_InheritedParent: 
+      m_Id: 008dace00e49c4866ba48258dcfac5d4
+      m_ProfileName: DeveloperMode
+      m_Values:
+      - m_Id: 274a1cc3a5c064dafa6e7bffcee2650b
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 4159de6800df847c08fa3a76e279c5ff
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: 398a3f79b580349d7b4b30be182023ac
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: f93c38ac455314528b92b8a205a10455
+        m_Value: DeveloperMode/[BuildTarget]
+      - m_Id: 67b22d229bef344a09a6aeccb886c54e
+        m_Value: https://jenkinsbucket-salin.s3.ap-northeast-2.amazonaws.com/DeveloperMode/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 274a1cc3a5c064dafa6e7bffcee2650b
       m_Name: BuildTarget
