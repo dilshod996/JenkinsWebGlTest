@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         UNITY_EXECUTABLE = '/Applications/Unity/Hub/Editor/2021.3.7f1/Unity.app/Contents/MacOS/Unity'
-        PROJECT_PATH = '/Desktop/SVN/JenkinsWebGlTest'
+        PROJECT_PATH = '/Users/salin/.jenkins/workspace/JenkinsUnityWebGlTest'
         BUILD_SCRIPT_NAME = 'WebGlBuildScript'
         AWS_CLI_EXECUTABLE = 'aws'
         S3_BUCKET_NAME = 'jenkinsbucket-salin'
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     // Upload Addressables build (including catalog) to S3
-                    sh "${AWS_CLI_EXECUTABLE} s3 sync ${PROJECT_PATH}/ServerData/WebGL/ s3://${S3_BUCKET_NAME}/${UNITY_BUILD_VERSION}/Addressables/"
+                    sh "${AWS_CLI_EXECUTABLE} s3 sync ${PROJECT_PATH}/ServerData/StandaloneOSX/ s3://${S3_BUCKET_NAME}/${UNITY_BUILD_VERSION}/Addressables/"
 
 
                 }
@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     // Upload WebGL build to S3
-                    sh "${AWS_CLI_EXECUTABLE} s3 sync ${PROJECT_PATH}/Build/WebGL/ s3://${S3_BUCKET_NAME}/${UNITY_BUILD_VERSION}/WebGL/"
+                    sh "${AWS_CLI_EXECUTABLE} s3 sync ${PROJECT_PATH}/Builds/ s3://${S3_BUCKET_NAME}/${UNITY_BUILD_VERSION}/WebGL/"
 
                 }
             }

@@ -13,9 +13,13 @@ public class WebGlBuildScript : MonoBehaviour
 
     private static AddressableAssetSettings settings;
 
-    private static string unknownKey = "UnkownKey";
+    private static string unknownKey = "UnkownKey"; // for testing what to know about the folder // now  it is also addressable version name
+    private static string BuildResultName = "Builds";
+
     private const string ASSETFOLDERNAME = "Assets";
     private const string AddressableProfileId = "Remote";
+
+    
 
     private static readonly string[] DEFINE_SYMBOLE = new string[]
     {
@@ -44,7 +48,7 @@ public class WebGlBuildScript : MonoBehaviour
     static void WebGLBuild()
     {
         // 빌드경로
-        string buildpath = Application.dataPath.Replace(ASSETFOLDERNAME, unknownKey);
+        string buildpath = Application.dataPath.Replace(ASSETFOLDERNAME, BuildResultName);
 
         if (Directory.Exists(buildpath))
             Directory.Delete(buildpath, true);
@@ -100,19 +104,7 @@ public class WebGlBuildScript : MonoBehaviour
         }
     }
 
-    static string GetAngs(string name)
-    {
-        var _angs = System.Environment.GetCommandLineArgs();
-        for (int i = 0; i < _angs.Length; i++)
-        {
-            if (_angs[i] == name && _angs.Length > i + 1)
-            {
-                return _angs[i + 1];
-            }
-        }
 
-        return null;
-    }
     static string[] FindEnabledEditorScenes()
     {
         return new string[]
