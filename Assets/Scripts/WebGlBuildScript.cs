@@ -1,45 +1,123 @@
-using UnityEditor;
-using UnityEditor.AddressableAssets;
+using System.Collections.Generic;
 using UnityEditor.AddressableAssets.Settings;
+using UnityEditor.AddressableAssets;
+using System.IO;
+using UnityEditor.Build.Reporting;
+using UnityEngine;
+using UnityEditor;
 
-public class WebGlBuildScript
+public class WebGlBuildScript : MonoBehaviour
 {
-    [MenuItem("Build/Build WebGL")]
-    public static void BuildWebGL()
+    private const string COMPANYNAME = "Salin";
+    private const string PRODUCTNAME = "XlabJenkins";
+
+    private static AddressableAssetSettings settings;
+
+    private static string unknownKey = "UnkownKey";
+    private const string ASSETFOLDERNAME = "Assets";
+    private const string AddressableProfileId = "Remote";
+
+    private static readonly string[] DEFINE_SYMBOLE = new string[]
     {
-        // Set player settings
-        PlayerSettings.companyName = "Salin";
-        PlayerSettings.productName = "XlabJenkins";
 
-        // Build Addressables
-        BuildAddressables();
+    };
 
-        // Set the target build path
-        string buildPath = "Build/WebGL";
+    [MenuItem("Build/Build_WebGL")]
+    public static void Build_WebGL()
+    {
+        List<string> allDefines = new List<string>();
 
-        string[] IncludedScenes = {
-            "Assets/Scenes/Intro.unity",
-        };
-
-
-       // string logFilePath = System.IO.Path.Combine(System.Environment.GetEnvironmentVariable("WORKSPACE"), "LogFiles", "build.log");
-        // Ensure the build directory exists
-        BuildPlayerOptions buildOptions = new BuildPlayerOptions
+        foreach (var SYMBOLE in DEFINE_SYMBOLE)
         {
-            scenes = IncludedScenes,
-            locationPathName = buildPath,
-            target = BuildTarget.WebGL,
-            options = BuildOptions.None,
-        };
+            allDefines.Add(SYMBOLE);
+        }
 
-        // Build the WebGL project
-        BuildPipeline.BuildPlayer(buildOptions);
+        allDefines.Add(unknownKey);
+
+
+        PlayerSettings.SetScriptingDefineSymbolsForGroup(
+            EditorUserBuildSettings.selectedBuildTargetGroup,
+            string.Join(";", allDefines.ToArray()));
+
+        WebGLBuild();
+    }
+    static void WebGLBuild()
+    {
+        // 빌드경로
+        string buildpath = Application.dataPath.Replace(ASSETFOLDERNAME, unknownKey);
+
+        if (Directory.Exists(buildpath))
+            Directory.Delete(buildpath, true);
+
+        // 번들경로
+        string bundleBuildpath = Application.dataPath.Replace(ASSETFOLDERNAME, "Bundles");
+
+        if (Directory.Exists(bundleBuildpath))
+            Directory.Delete(bundleBuildpath, true);
+
+        // 어드레서블
+        settings = AddressableAssetSettingsDefaultObject.Settings;
+        settings.OverridePlayerVersion = unknownKey; // only for test
+        settings.ContentStateBuildPath = "";
+
+        string profileId = settings.profileSettings.GetProfileId(AddressableProfileId);
+        settings.activeProfileId = profileId;
+
+        AddressableAssetSettings.BuildPlayerContent();
+
+        // 앱세팅
+
+        PlayerSettings.SplashScreen.show = false;
+
+        PlayerSettings.SetApiCompatibilityLevel(BuildTargetGroup.WebGL, ApiCompatibilityLevel.NET_Unity_4_8);
+
+        PlayerSettings.companyName = COMPANYNAME;
+        PlayerSettings.productName = PRODUCTNAME;
+
+
+        BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+
+        buildPlayerOptions.scenes = FindEnabledEditorScenes();
+
+        buildPlayerOptions.locationPathName = unknownKey;
+        buildPlayerOptions.target = BuildTarget.WebGL;
+        buildPlayerOptions.options = BuildOptions.None;
+
+
+        BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+
+        BuildSummary summary = report.summary;
+
+
+        if (summary.result == BuildResult.Succeeded)
+        {
+            Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+        }
+
+        if (summary.result == BuildResult.Failed)
+        {
+            Debug.Log("Build failed");
+        }
     }
 
-    private static void BuildAddressables()
+    static string GetAngs(string name)
     {
-        // Build Addressables
-        AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
-        AddressableAssetSettings.BuildPlayerContent();
+        var _angs = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < _angs.Length; i++)
+        {
+            if (_angs[i] == name && _angs.Length > i + 1)
+            {
+                return _angs[i + 1];
+            }
+        }
+
+        return null;
+    }
+    static string[] FindEnabledEditorScenes()
+    {
+        return new string[]
+        {
+            "Assets/Scenes/Intro.unity",
+        };
     }
 }

@@ -15,7 +15,7 @@ public class IntroController : MonoBehaviour
     public Button DownloadAddressables;
 
     // Addressable groups
-    bool startDownload = false;
+
     private const string SceneGroup = "Scenes";
     private const string ImagesGroup = "ProfileImage";
     List<string> addressableGroups = new List<string>
