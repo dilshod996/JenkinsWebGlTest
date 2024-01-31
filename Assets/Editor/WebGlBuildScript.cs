@@ -13,7 +13,12 @@ public class WebGlBuildScript : MonoBehaviour
 
     private static AddressableAssetSettings settings;
 
-    private static string unknownKey = "UnkownKey"; // for testing what to know about the folder // now  it is also addressable version name
+
+    private const string branchKeyGit = "-branchkey";
+    private static string branchKeyInUse = string.Empty;
+    private static string branchKey = "DEV"; // for testing 
+
+    // WebGl build folder and after build all files will be inside of the folder
     private static string BuildResultName = "Builds";
 
 
@@ -21,11 +26,11 @@ public class WebGlBuildScript : MonoBehaviour
     private const string AddressableProfileId = "Remote";
 
 
-    // Working with branches for addressables and build files
+    // Working with branches for addressables and build files/ must include brach key here
     private const string Devbranch = "DeveloperMode";
 
     
-
+    // explain which symbolssalin@2020
     private static readonly string[] DEFINE_SYMBOLE = new string[]
     {
 
@@ -34,6 +39,13 @@ public class WebGlBuildScript : MonoBehaviour
     [MenuItem("Build/Build_WebGL")]
     public static void Build_WebGL()
     {
+        // if needed to add symbols
+        //branchKeyInUse = GetArgumentFromJenkinsCommandLine(branchKeyGit);
+        //if (string.IsNullOrEmpty(branchKeyInUse))
+        //{
+        //    Debug.Log("BranchKey is not exist");
+        //    return;
+        //}
         List<string> allDefines = new List<string>();
 
         foreach (var SYMBOLE in DEFINE_SYMBOLE)
@@ -41,7 +53,7 @@ public class WebGlBuildScript : MonoBehaviour
             allDefines.Add(SYMBOLE);
         }
 
-        allDefines.Add(unknownKey);
+        allDefines.Add(branchKey);
 
 
         PlayerSettings.SetScriptingDefineSymbolsForGroup(
@@ -52,24 +64,26 @@ public class WebGlBuildScript : MonoBehaviour
     }
     static void WebGLBuild()
     {
+
+
         // 빌드경로
-        string buildpath = Application.dataPath.Replace(ASSETFOLDERNAME, BuildResultName);
+        //string buildpath = Application.dataPath.Replace(ASSETFOLDERNAME, BuildResultName);
 
-        if (Directory.Exists(buildpath))
-            Directory.Delete(buildpath, true);
+        //if (Directory.Exists(buildpath))
+        //    Directory.Delete(buildpath, true);
 
-        // 번들경로
-        string bundleBuildpath = Application.dataPath.Replace(ASSETFOLDERNAME, "Bundles");
+        //// 번들경로
+        //string bundleBuildpath = Application.dataPath.Replace(ASSETFOLDERNAME, "Bundles");
 
-        if (Directory.Exists(bundleBuildpath))
-            Directory.Delete(bundleBuildpath, true);
+        //if (Directory.Exists(bundleBuildpath))
+        //    Directory.Delete(bundleBuildpath, true);
 
         // 어드레서블
         settings = AddressableAssetSettingsDefaultObject.Settings;
-        settings.OverridePlayerVersion = unknownKey; // only for test
+        settings.OverridePlayerVersion = branchKey; // only for test you can change it with actually branch key name
         settings.ContentStateBuildPath = "";
 
-        //string profileId = settings.profileSettings.GetProfileId(AddressableProfileId); // This for Remote Profile build
+
         string profileId = settings.profileSettings.GetProfileId(Devbranch);
         settings.activeProfileId = profileId;
 
@@ -117,5 +131,18 @@ public class WebGlBuildScript : MonoBehaviour
         {
             "Assets/Scenes/Intro.unity",
         };
+    }
+    static string GetArgumentFromJenkinsCommandLine(string name)
+    {
+        var _angs = System.Environment.GetCommandLineArgs();
+        for (int i = 0; i < _angs.Length; i++)
+        {
+            if (_angs[i] == name && _angs.Length > i + 1)
+            {
+                return _angs[i + 1];
+            }
+        }
+
+        return null;
     }
 }
