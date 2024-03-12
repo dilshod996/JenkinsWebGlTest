@@ -73,9 +73,11 @@ public class WebGlBuildScript : MonoBehaviour
         settings.OverridePlayerVersion = branchKey; // only for test you can change it with actually branch key name
         settings.ContentStateBuildPath = "";
         string addressableBuildLoc = Path.Combine(Devbranch, Version, "WebGL");
-        settings.buildSettings.bundleBuildPath = addressableBuildLoc;
+       
+        //settings.buildSettings.bundleBuildPath = addressableBuildLoc;
         string profileId = settings.profileSettings.GetProfileId(Devbranch);
         settings.activeProfileId = profileId;
+        settings.profileSettings.SetValue(profileId, "RemoteBuildPath", addressableBuildLoc);
 
         AddressableAssetSettings.BuildPlayerContent();
 
