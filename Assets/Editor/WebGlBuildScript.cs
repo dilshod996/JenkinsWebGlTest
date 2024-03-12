@@ -25,7 +25,7 @@ public class WebGlBuildScript : MonoBehaviour
     private const string ASSETFOLDERNAME = "Assets";
     private const string AddressableProfileId = "Remote";
 
-
+    private static string Version = string.Empty;
     // Working with branches for addressables and build files/ must include brach key here
     private const string Devbranch = "DeveloperMode";
 
@@ -66,30 +66,20 @@ public class WebGlBuildScript : MonoBehaviour
     {
 
 
-        // 빌드경로
-        //string buildpath = Application.dataPath.Replace(ASSETFOLDERNAME, BuildResultName);
 
-        //if (Directory.Exists(buildpath))
-        //    Directory.Delete(buildpath, true);
-
-        //// 번들경로
-        //string bundleBuildpath = Application.dataPath.Replace(ASSETFOLDERNAME, "Bundles");
-
-        //if (Directory.Exists(bundleBuildpath))
-        //    Directory.Delete(bundleBuildpath, true);
-
-        // 어드레서블
+        Version = PlayerSettings.bundleVersion;
+        // Addressablesss
         settings = AddressableAssetSettingsDefaultObject.Settings;
         settings.OverridePlayerVersion = branchKey; // only for test you can change it with actually branch key name
         settings.ContentStateBuildPath = "";
-
-
+        string addressableBuildLoc = Path.Combine(Devbranch, Version, "WebGL");
+        settings.buildSettings.bundleBuildPath = addressableBuildLoc;
         string profileId = settings.profileSettings.GetProfileId(Devbranch);
         settings.activeProfileId = profileId;
 
         AddressableAssetSettings.BuildPlayerContent();
 
-        // 앱세팅
+        // App Settings
 
         PlayerSettings.SplashScreen.show = false;
 
@@ -103,7 +93,7 @@ public class WebGlBuildScript : MonoBehaviour
 
         buildPlayerOptions.scenes = FindEnabledEditorScenes();
 
-        buildPlayerOptions.locationPathName =Devbranch +"/"+ BuildResultName;
+        buildPlayerOptions.locationPathName =Devbranch +"/"+ Version + "/"+ BuildResultName;
         buildPlayerOptions.target = BuildTarget.WebGL;
         buildPlayerOptions.options = BuildOptions.None;
 
